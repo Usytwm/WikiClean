@@ -1,27 +1,9 @@
 import pandas as pd
 import re
+import regex as reg
 from datetime import date, datetime
 
-# patron para eliminar todos los saltos de linea menos el ultimo
-_del_saltos_d_linea = re.compile(r'\n(?!-\||$)')
 
-# patron para sustituir donde quiera que halla |- por \n|- ya que ahi empieza una nueva fila y quiero identificar las filas desde |- hasta un salto de linea
-_ident_newFile = re.compile(r'\|\-')
-
-# patron que identifica cuando es una fila desde |- hasta un salto de linea
-_patron_fila = re.compile(r'\|-(.*?)(?=\n)')
-
-#patron para buscar sustituir la edad 
-_asignar_edad = re.compile(r'edad=\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}')
-
-_asignar_fecha = re.compile(r'\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}')
-
-# para quitar el css de la tabla
-_css_table = re.compile(r'\s*(?:valign|width|bgcolor|scope|colspan|rowspan|class|border|align|cellpadding|cellspacing|cell|style)\s*=#?(\s*"[^"]*"|\w+)%?')
-
-_ref = re.compile(r'<ref[^>]*>.*?</ref>')
-
-_chtml=re.compile(r'<[^>]*>')
 
 def _replace(match):
     """
@@ -240,26 +222,26 @@ def _toString(matchobj: re.Match):
     for i in tabar:
         tab = tab+i
     
-    tab = _del_saltos_d_linea.sub('', tab)
+    tab = reg._del_saltos_d_linea.sub('', tab)
     
-    tab = _ident_newFile.sub("\n|-", tab)
+    tab = reg._ident_newFile.sub("\n|-", tab)
     
     tab = tab+'\n'  # agrego un salto de linea al final en caso de que no lo tenga
     
-    tab = _css_table.sub('', tab)  
+    tab = reg._css_table.sub('', tab)  
     
-    tab = _ref.sub("", tab)
+    tab = reg._ref.sub("", tab)
     
-    tab = _chtml.sub('', tab)
+    tab = reg._chtml.sub('', tab)
     
     if(not _is_valid(tab)):
         tab = "|-"+tab
     
-    tab = _asignar_edad.sub(_calcular_edad, tab)
+    tab = reg._asignar_edad.sub(_calcular_edad, tab)
 
-    tab = _asignar_fecha.sub(r'\1/\2/\3', tab)
+    tab = reg._asignar_fecha.sub(r'\1/\2/\3', tab)
 
-    filas = re.findall(_patron_fila, tab)
+    filas = re.findall(reg._patron_fila, tab)
     matrix = []
     for fila in filas:
         arr = _array(fila)
