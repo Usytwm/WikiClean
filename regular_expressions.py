@@ -2,68 +2,109 @@ import re
 import tables as tb
 
 
+_space = re.compile(r'&nbsp;')
+
+_asignar_edad = re.compile(r'edad=\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}')##
+
+_abreviacion = re.compile(r"\{\{abreviación\|.*\|(.*)\}\}")##
+
+_asignar_fecha = re.compile(r'\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}')##
+
+_ref = re.compile(r'<ref[^>]*>.*?</ref>')
+
+_https = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+
+_curly_brackets = re.compile(r"\{\{[^{]*?\}\}")
+
+_links = re.compile(r"\[\[(?:[^|\]\[]*\|)*([^\]]+)\]\]")
+
+_html = re.compile(r"<[\s\S]*?>")
+
+_formato = re.compile(r"'{2,}|\({2,}|\){2,}|\"{2,}")
+
+_css = re.compile(r"\{\|[\s\S]*?\|\}")
+
+_line_break = re.compile(r"\n{2,}")
+
+_ascii = re.compile(r"[^\x00-\x7FÁáÉéÍíÓóÚúÜü¡¿Ññ]+")
+
+
+
+
 def supr_special_characters(contents):
-    contents = re.sub(r'&nbsp;', ' ', contents)
+    """
+    Text Cleaning
+    ---
+    ---
 
-    asignar_edad = re.compile(r'edad=\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}')##
-    contents = asignar_edad.sub(tb.calcular_edad, contents)
+    This method cleans the text using regular expressions and removes Wikipedia formatting.
 
-    abreviacion = re.compile(r"\{\{abreviación\|.*\|(.*)\}\}")##
-    contents = abreviacion.sub(tb.replace,contents)
+    Parameters:
+    -
+    contents (str): the text to be cleaned
+        
+    Returns:
+    -
+    str: the cleaned text
+    """
+    
+    contents = _space.sub(' ', contents)
 
-    asignar_fecha = re.compile(r'\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}')##
-    contents = asignar_fecha.sub(r'\1/\2/\3', contents)
+    contents = _asignar_edad.sub(tb._calcular_edad, contents)
+    
+    contents = _abreviacion.sub(tb._replace,contents)
+    
+    contents = _asignar_fecha.sub(r'\1/\2/\3', contents)
+   
+    contents = _ref.sub( "", contents)##
 
-    contents = re.sub(r"<ref[^>]*>.*?</ref>", "", contents)##
-
-    https = re.compile(
-        r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
-    contents = https.sub("", contents)
-
-    curly_brackets = re.compile(r"\{\{[^{]*?\}\}")
+    contents = _https.sub("", contents)
 
     while(True):
-        aux = curly_brackets.sub("", contents)
+        aux = _curly_brackets.sub("", contents)
         if contents == aux:
             break
         contents = aux
 
-    links = re.compile(r"\[\[(?:[^|\]\[]*\|)*([^\]]+)\]\]")
-
     while(True):
-        aux = links.sub(r"\1", contents)
+        aux = _links.sub(r"\1", contents)
         if aux == contents:
             break
         contents = aux
 
-    html = re.compile(r"<[\s\S]*?>")
-
     while(True):
-        aux = html.sub("", contents)
+        aux = _html.sub("", contents)
         if aux == contents:
             break
         contents = aux
+    
+    contents = _formato.sub("", contents)
+    
+    contents = _css.sub(tb._toString, contents)
+    
+    contents = _line_break.sub("\n\n", contents)
 
-    formato = re.compile(r"'{2,}|\({2,}|\){2,}|\"{2,}")
-    contents = formato.sub("", contents)
-
-    css = re.compile(r"\{\|[\s\S]*?\|\}")
-    contents = css.sub(tb.toString, contents)
-
-    """
-    css = re.compile(r"\{\|[\s\S]*?\|\}")
-    contents = css.sub("cojone", contents)
-
-    pipes = re.compile(r"\|[\S\s]*?\n")
-    contents = pipes.sub("", contents)"""
-
-    line_break = re.compile(r"\n{2,}")
-    contents = line_break.sub("\n\n", contents)
-
+    contents = _ascii.sub("", contents)
+    
     return contents
 
 
 def summary(contents):
+    """
+    Summary of the text
+    ---
+    ---
+
+    Extracts the summary of the text
+    
+    Parameters:
+    -
+    contents (str): the text
+    
+    Returns:
+    -
+    str: summary of the text
+    """
     summary = "---RESUMEN---"
     index = re.search(r"\n+[\S\s]*?\n\n\=", contents)
     for i in range(index.start(), index.end() - 1):
@@ -72,12 +113,24 @@ def summary(contents):
 
 
 def body(contents):
+    """
+    Body of the text
+    ---
+    ---
+
+    Extracts the body of the text
+    
+    Parameters:
+    -
+    contents (str): the text
+    
+    Returns:
+    -
+    str: body of the text
+    """
     body = "---CUERPO---\n"
     index = re.search(r"\n\=[\S\s]*", contents)
     for i in range(index.start(), index.end() - 1):
         body += contents[i]
     return re.compile(r"\=+\s*(.*?)\s*\=+").sub(r"\1:", body)
 
-
-def contents_board(contents):
-    pass

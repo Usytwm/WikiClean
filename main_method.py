@@ -1,5 +1,4 @@
 import regular_expressions as x
-import re
 
 file = open("texto.txt", "r", encoding="utf-8")
 contents = file.read()
