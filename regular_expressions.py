@@ -2,6 +2,7 @@ import re
 import regex as reg
 import tables as tb
 
+
 def supr_special_characters(contents):
     """
     Text Cleaning
@@ -13,50 +14,52 @@ def supr_special_characters(contents):
     Parameters:
     -
     contents (str): the text to be cleaned
-        
+
     Returns:
     -
     str: the cleaned text
     """
-    
-    contents = reg._space.sub(' ', contents)
+
+    contents = reg._space.sub(" ", contents)
 
     contents = reg._asignar_edad.sub(tb._calcular_edad, contents)
-    
-    contents = reg._abreviacion.sub(tb._replace,contents)
-    
-    contents = reg._asignar_fecha.sub(r'\1/\2/\3', contents)
-   
-    contents = reg._ref.sub( "", contents)##
+
+    contents = reg._abreviacion.sub(tb._replace, contents)
+
+    contents = reg._asignar_fecha.sub(r"\1/\2/\3", contents)
+
+    contents = reg._ref.sub("", contents)  ##
 
     contents = reg._https.sub("", contents)
 
-    while(True):
+    while True:
         aux = reg._curly_brackets.sub("", contents)
         if contents == aux:
             break
         contents = aux
 
-    while(True):
+    while True:
         aux = reg._links.sub(r"\1", contents)
         if aux == contents:
             break
         contents = aux
 
-    while(True):
+    while True:
         aux = reg._html.sub("", contents)
         if aux == contents:
             break
         contents = aux
-    
+
     contents = reg._formato.sub("", contents)
-    
+
     contents = reg._css.sub(tb._toString, contents)
-    
+
     contents = reg._line_break.sub("\n\n", contents)
 
     contents = reg._ascii.sub("", contents)
-    
+
+    contents = reg._none.sub("-", contents)
+
     return contents
 
 
@@ -67,11 +70,11 @@ def summary(contents):
     ---
 
     Extracts the summary of the text
-    
+
     Parameters:
     -
     contents (str): the text
-    
+
     Returns:
     -
     str: summary of the text
@@ -90,11 +93,11 @@ def body(contents):
     ---
 
     Extracts the body of the text
-    
+
     Parameters:
     -
     contents (str): the text
-    
+
     Returns:
     -
     str: body of the text
@@ -104,4 +107,3 @@ def body(contents):
     for i in range(index.start(), index.end() - 1):
         body += contents[i]
     return re.compile(r"\=+\s*(.*?)\s*\=+").sub(r"\1:", body)
-

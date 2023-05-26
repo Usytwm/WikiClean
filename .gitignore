@@ -2,4 +2,5 @@ new_file.txt
 texto.txt
 test.py
 __pycache__
+.vscode
 
