@@ -268,6 +268,6 @@ def toString(matchobj: re.Match):
         arr = _array(fila)
         if len(arr) > 0:
             matrix.append(arr)
-
-    df = pd.DataFrame(matrix)
-    return df.to_string(index=False, header=False)
+    if len(matrix) != 0:
+        df = pd.DataFrame(matrix)
+        return df.to_string(index=False, header=False)
