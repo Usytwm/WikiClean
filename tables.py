@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import date, datetime
 
 
-def _replace(match):
+def replace(match):
     """
     Replace
     ---
@@ -192,7 +192,7 @@ def _calcular_edad(match):
     return f"edad={edad}"
 
 
-def _toString(matchobj: re.Match):
+def toString(matchobj: re.Match):
     """
     A String
     ---
@@ -243,26 +243,26 @@ def _toString(matchobj: re.Match):
     for i in tabar:
         tab = tab + i
 
-    tab = reg._del_saltos_d_linea.sub("", tab)
+    tab = reg.Del_saltos_d_linea.sub("", tab)
 
-    tab = reg._ident_newFile.sub("\n|-", tab)
+    tab = reg.Ident_newFile.sub("\n|-", tab)
 
     tab = tab + "\n"  # agrego un salto de linea al final en caso de que no lo tenga
 
-    tab = reg._css_table.sub("", tab)
+    tab = reg.Css_table.sub("", tab)
 
-    tab = reg._ref.sub("", tab)
+    tab = reg.Ref.sub("", tab)
 
-    tab = reg._chtml.sub("", tab)
+    tab = reg.Chtml.sub("", tab)
 
     if not _is_valid(tab):
         tab = "|-" + tab
 
-    tab = reg._asignar_edad.sub(_calcular_edad, tab)
+    tab = reg.Asignar_edad.sub(_calcular_edad, tab)
 
-    tab = reg._asignar_fecha.sub(r"\1/\2/\3", tab)
+    tab = reg.Asignar_fecha.sub(r"\1/\2/\3", tab)
 
-    filas = re.findall(reg._patron_fila, tab)
+    filas = re.findall(reg.Patron_fila, tab)
     matrix = []
     for fila in filas:
         arr = _array(fila)

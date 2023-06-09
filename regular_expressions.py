@@ -20,45 +20,45 @@ def supr_special_characters(contents):
     str: the cleaned text
     """
 
-    contents = reg._space.sub(" ", contents)
+    contents = reg.Space.sub(" ", contents)
 
-    contents = reg._asignar_edad.sub(tb._calcular_edad, contents)
+    contents = reg.Asignar_edad.sub(tb._calcular_edad, contents)
 
-    contents = reg._abreviacion.sub(tb._replace, contents)
+    contents = reg.Abreviacion.sub(tb.replace, contents)
 
-    contents = reg._asignar_fecha.sub(r"\1/\2/\3", contents)
+    contents = reg.Asignar_fecha.sub(r"\1/\2/\3", contents)
 
-    contents = reg._ref.sub("", contents)  ##
+    contents = reg.Ref.sub("", contents)  ##
 
-    contents = reg._https.sub("", contents)
+    contents = reg.Https.sub("", contents)
 
     while True:
-        aux = reg._curly_brackets.sub("", contents)
+        aux = reg.Curly_brackets.sub("", contents)
         if contents == aux:
             break
         contents = aux
 
     while True:
-        aux = reg._links.sub(r"\1", contents)
+        aux = reg.Links.sub(r"\1", contents)
         if aux == contents:
             break
         contents = aux
 
     while True:
-        aux = reg._html.sub("", contents)
+        aux = reg.Html.sub("", contents)
         if aux == contents:
             break
         contents = aux
 
-    contents = reg._formato.sub("", contents)
+    contents = reg.Formato.sub("", contents)
 
-    contents = reg._css.sub(tb._toString, contents)
+    contents = reg.Css.sub(tb.toString, contents)
 
-    contents = reg._line_break.sub("\n\n", contents)
+    contents = reg.Line_break.sub("\n\n", contents)
 
-    contents = reg._ascii.sub("", contents)
+    contents = reg.Ascii.sub("", contents)
 
-    contents = reg._none.sub("-", contents)
+    contents = reg.Tnone.sub("-", contents)
 
     return contents
 
