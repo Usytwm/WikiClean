@@ -22,11 +22,11 @@ def supr_special_characters(contents):
 
     contents = reg.Space.sub(" ", contents)
 
-    contents = reg.Asignar_edad.sub(tb._calcular_edad, contents)
+    contents = reg.Assign_age.sub(tb.calculate_age, contents)
 
-    contents = reg.Abreviacion.sub(tb.replace, contents)
+    contents = reg.Abbreviation.sub(tb.replace, contents)
 
-    contents = reg.Asignar_fecha.sub(r"\1/\2/\3", contents)
+    contents = reg.Assign_date.sub(r"\1/\2/\3", contents)
 
     contents = reg.Ref.sub("", contents)  ##
 
@@ -50,7 +50,7 @@ def supr_special_characters(contents):
             break
         contents = aux
 
-    contents = reg.Formato.sub("", contents)
+    contents = reg.Format.sub("", contents)
 
     contents = reg.Css.sub(tb.toString, contents)
 

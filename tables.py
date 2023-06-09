@@ -70,7 +70,6 @@ def _extract_text(text: str):
     return ret
 
 
-####
 def _array(fila: str):
     """
     Converts a text string into a list of elements.
@@ -115,10 +114,8 @@ def _array(fila: str):
             result[ind] = ""
             result = ins(result, ind, number - 2)
             ind += number - 1
-            # print(f'Número extraído de "{result[ind]}": {number}')
         k = len(result)
         ind += 1
-
     return result
 
 
@@ -158,7 +155,7 @@ def _is_valid(table: str):
         return False
 
 
-def _calcular_edad(match):
+def calculate_age(match):
     """
     Calculate age
     ---
@@ -181,15 +178,15 @@ def _calcular_edad(match):
     >>> _calculate_age(match)
     'age=33'
     """
-    fecha = "|".join(match.groups())
-    hoy = date.today()
-    fecha_nacimiento = datetime.strptime(fecha, "%d|%m|%Y")
-    edad = (
-        hoy.year
-        - fecha_nacimiento.year
-        - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
+    dat = "|".join(match.groups())
+    today = date.today()
+    date_of_birth = datetime.strptime(dat, "%d|%m|%Y")
+    age = (
+        today.year
+        - date_of_birth.year
+        - ((today.month, today.day) < (date_of_birth.month, date_of_birth.day))
     )
-    return f"edad={edad}"
+    return f"edad={age}"
 
 
 def toString(matchobj: re.Match):
@@ -243,7 +240,7 @@ def toString(matchobj: re.Match):
     for i in tabar:
         tab = tab + i
 
-    tab = reg.Del_saltos_d_linea.sub("", tab)
+    tab = reg.delete_line_breaks.sub("", tab)
 
     tab = reg.Ident_newFile.sub("\n|-", tab)
 
@@ -258,14 +255,14 @@ def toString(matchobj: re.Match):
     if not _is_valid(tab):
         tab = "|-" + tab
 
-    tab = reg.Asignar_edad.sub(_calcular_edad, tab)
+    tab = reg.Assign_age.sub(calculate_age, tab)
 
-    tab = reg.Asignar_fecha.sub(r"\1/\2/\3", tab)
+    tab = reg.Assign_date.sub(r"\1/\2/\3", tab)
 
     filas = re.findall(reg.Patron_fila, tab)
     matrix = []
-    for fila in filas:
-        arr = _array(fila)
+    for file in filas:
+        arr = _array(file)
         if len(arr) > 0:
             matrix.append(arr)
     if len(matrix) != 0:

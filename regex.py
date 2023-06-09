@@ -4,15 +4,15 @@ Space = re.compile(
     r"&nbsp;"
 )  # Busca la expresión " " que representa un espacio en blanco en HTML.
 
-Asignar_edad = re.compile(
+Assign_age = re.compile(
     r"edad=\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}"
 )  # Busca la expresión "{{edad|día|mes|año}}" y captura los valores de día, mes y año en grupos.
 
-Abreviacion = re.compile(
+Abbreviation = re.compile(
     r"\{\{abreviación\|.*\|(.*)\}\}"
 )  # Busca la expresión "{{abreviación|idioma|abreviatura}}" y captura la abreviatura en un grupo.
 
-Asignar_fecha = re.compile(
+Assign_date = re.compile(
     r"\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}"
 )  # Busca la expresión "{{edad|día|mes|año}}" y captura los valores de día, mes y año en grupos.
 
@@ -36,7 +36,7 @@ Html = re.compile(
     r"<[\s\S]*?>"
 )  # Busca las etiquetas HTML y todo lo que hay entre ellas.
 
-Formato = re.compile(
+Format = re.compile(
     r"'{2,}|\({2,}|\){2,}|\"{2,}"
 )  # Busca las comillas dobles o simples repetidas dos o más veces, o los paréntesis repetidos dos o más veces.
 
@@ -50,7 +50,7 @@ Ascii = re.compile(
     r"[^\x00-\x7FÁáÉéÍíÓóÚúÜü¡¿Ññ]+"
 )  # Busca todos los caracteres que no son ASCII o caracteres especiales en español.
 
-Del_saltos_d_linea = re.compile(
+delete_line_breaks = re.compile(
     r"\n(?!-\||$)"
 )  # Busca los saltos de línea que no están seguidos por "-|" o el final de la línea.
 
@@ -61,14 +61,6 @@ Ident_newFile = re.compile(
 Patron_fila = re.compile(
     r"\|-(.*?)(?=\n)"
 )  # Busca las filas de una tabla que comien con "|-" y terminan con un salto de línea.
-
-Asignar_edad = re.compile(
-    r"edad=\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}"
-)  # Busca la expresión "edad={{edad|día|mes|año}}" y captura los valores de día, mes y año en grupos.
-
-Asignar_fecha = re.compile(
-    r"\{\{edad\|(\d+)\|(\d+)\|(\d+)\}\}"
-)  # Busca la expresión "{{edad|día|mesaño}}" y captura los valores de día, mes y año en grupos.
 
 Css_table = re.compile(
     r'\s*(?:valign|width|bgcolor|scope|rowspan|class|border|align|cellpadding|cellspacing|cell|style)\s*=#?(\s*"[^"]*"|\w+)%?'
